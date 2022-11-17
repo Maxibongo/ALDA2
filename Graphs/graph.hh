@@ -39,4 +39,5 @@ private:
 	vector<Vertex> vertices;
 	vector<Edge> edges;
 	map<vector<Edge> > adjEdges;
+	map<vector<Edge> > revEdges;
 };
