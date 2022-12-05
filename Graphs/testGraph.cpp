@@ -1,43 +1,41 @@
-#ifndef GRAPH_hh
-#define GRAPH_hh
-
 #include "graph.hh"
-#include <iostream>
-#include <vector>
 
-int main(){
-	Vertex v1;
-	std::cout << v1.pot << std::endl;
-	Vertex v2(9.0);
-	std::cout << v2.pot << std::endl;
+int main() {
+    Node n1(-3);
+	Node n2(2);
+	n1.print();
+	n2.print();
 
-	Edge e1;
-	std::cout << e1.weight << std::endl;
-	Edge e2(v1,v2);
-	std::cout << e2.weight << std::endl;
-	Edge e3(v1,v2,5.0);
-	std::cout << e3.weight << std::endl;
+	std::vector<Node> n;
+	n.push_back(n1);
+	n.push_back(n2);
 
-	std::vector<Vertex> vs;
-	vs.push_back(v1);
-	vs.push_back(v2);
+	std::cout << inVector(n, n1) << std::endl;
 
-	std::vector<Edge> es;
-	es.push_back(e1);
-	es.push_back(e2);
-	es.push_back(e3);
+	Edge e(n1,n2,5);
+	e.print(); 
 
-	Graph g(vs, es);
-	std::vector<Edge> e = g.getEdges();
+	Graph g;
+	g.addNode(n1);
+	g.addNode(n2);
 
-	for(int i = 0; i < e.size(); i++){
-		std::cout << &e[i].start << " " << &e[i].end << std::endl;
+	std::vector<Node> nodes = g.getNodes();
+	std::vector<Edge> edges = g.getEdges();
+
+	std::cout << "Nodes: " << nodes[0].getID();
+	for(int i = 1; i < nodes.size(); i++){
+		std::cout << " , " << nodes[i].getID();
 	}
+	std::cout << std::endl;
 
-	std::cout << v1 == v2 << std::endl;
-	std::cout << v1 == v1 << std::endl;
-	
+	std::cout << "Edges: " << "(" << edges[0].getStart().getID() << "," << edges[0].getEnd().getID() << ")";
+	for(int i = 1; i < nodes.size(); i++){
+		std::cout << " , " << "(" << edges[i].getStart().getID() << "," << edges[i].getEnd().getID() << ")";
+	}
+	std::cout << std::endl;
+
+	g.print();
+
+
+	return 0; 
 }
-
-
-#endif

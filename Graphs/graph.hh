@@ -1,42 +1,79 @@
+#ifndef GRAPH
+#define GRAPH
+
 #include <iostream>
 #include <vector>
+#include <map>
 
-using namespace std;
+static int NodeID;
 
-struct Vertex{
-	double pot;
-	Vertex() : pot(0){};
-	Vertex(double pot) : pot(pot){};
+struct Node{
+    public:
+    Node();
+    Node(int weight_);
+    int getWeight() const;
+    int getID() const;
+    void setWeight(int weight_);
+    void print();
+
+    private:
+    int weight;
+    int ID;
 };
 
 struct Edge{
-	Vertex start, end;
-	double weight;
-	Edge() : weight(0){};
-	Edge(Vertex start, Vertex end) : start(start), end(end), weight(0){};
-	Edge(Vertex start, Vertex end, double weight) : start(start), end(end), weight(weight){};
+    public:
+    Edge();
+    Edge(int weight_);
+    Edge(Node start_, Node end_, int weight_);
+    Node getStart() const;
+    Node getEnd() const;
+    int getWeight() const;
+    void setStart(Node start_);
+    void setEnd(Node end_);
+    void setWeight(int weight_);
+    void print();
+
+    private:
+    Node start;
+    Node end;
+    int weight;
 };
+
+struct NodeComparator{
+    public:
+    bool operator() (const Node& lNode, const Node& rNode) const
+   {
+       return lNode.getID() < rNode.getID();
+   }
+};
+
+
 
 class Graph{
 public:
-	Graph();
-	Graph(Vertex v);
-	Graph(Edge e);
-	Graph(vector<Edge> e);
-	Graph(vector<Vertex> v);
-	Graph(vector<Vertex> v, vector<Edge> e);
-	vector<Vertex> getVertices();
-	vector<Edge> getEdges();
-	vector<vector<Edge> > getAdjEdges();
-	void insertVertex(const Vertex v);
-	void removeVertex(Vertex v);
-	void insertEdge(const Edge e);
-	void removeEdge(Edge e);
-
-
-private:	
-	vector<Vertex> vertices;
-	vector<Edge> edges;
-	map<vector<Edge> > adjEdges;
-	map<vector<Edge> > revEdges;
+    Graph(bool dir = false);
+    Graph(Node n, bool dir = false);
+    Graph(Edge e, bool dir = false);
+    Graph(Node n, Edge e, bool dir = false);
+    Graph(std::vector<Node>& nodes_, std::vector<Edge>& edges_, bool dir = false);
+    void addEdge(Edge e, bool bi);
+    void addNode(Node n);
+    void print();
+    std::vector<Edge> getEdges() const;
+    std::vector<Node> getNodes() const;
+    std::map<Node, std::vector<Node>, NodeComparator> getAdjacencyList() const;
+    bool getDirectional();
+private:
+    std::vector<Node> nodes;
+    std::vector<Edge> edges;
+    std::map<Node, std::vector<Node>, NodeComparator> adjacencyList;
+    bool directional;
 };
+
+template<class T>
+bool inVector(std::vector<T>& con, T element);
+
+
+
+#endif /* end of include guard: GRAPH */
