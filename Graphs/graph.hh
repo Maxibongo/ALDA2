@@ -57,7 +57,7 @@ public:
     Graph(Edge e, bool dir = false);
     Graph(Node n, Edge e, bool dir = false);
     Graph(std::vector<Node>& nodes_, std::vector<Edge>& edges_, bool dir = false);
-    void addEdge(Edge e, bool bi);
+    void addEdge(Edge e, bool bi=false);
     void addNode(Node n);
     void print();
     std::vector<Edge> getEdges() const;

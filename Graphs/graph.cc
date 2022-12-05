@@ -140,10 +140,10 @@ Graph::Graph(Edge e,bool dir){
 Graph::Graph(Node n, Edge e, bool dir){
 	this->nodes.push_back(n);
 	this->edges.push_back(e);
-	if(inVector(this->nodes, e.getStart())){
+	if(!inVector(this->nodes, e.getStart())){
 		this->nodes.push_back(e.getStart());
 	}
-	if(inVector(this->nodes, e.getEnd())){
+	if(!inVector(this->nodes, e.getEnd())){
 		this->nodes.push_back(e.getEnd());
 	}
 	if(!dir){
@@ -177,10 +177,10 @@ Graph::Graph(std::vector<Node>& nodes_, std::vector<Edge>& edges_,bool dir){
 
 void Graph::addEdge(Edge e,bool bi){
 	this->edges.push_back(e);
-	if(inVector<Node>(this->nodes, e.getStart())){
+	if(!inVector<Node>(this->nodes, e.getStart())){
 		this->nodes.push_back(e.getStart());
 	}
-	if(inVector<Node>(this->nodes, e.getEnd())){
+	if(!inVector<Node>(this->nodes, e.getEnd())){
 		this->nodes.push_back(e.getEnd());
 	}
 	this->adjacencyList[e.getStart()].push_back(e.getEnd());
@@ -197,12 +197,16 @@ void Graph::addNode(Node n){
 
 void Graph::print(){
 	for(std::map<Node,std::vector<Node> >::iterator it = this->adjacencyList.begin(); it != this->adjacencyList.end(); ++it) {
-      std::cout << "Node: " << it->first.getID() << std::endl;
-      std::cout << "Value: " << this->adjacencyList[it->first][0].getID();
-      for(int j = 1; j < this->adjacencyList[it->first].size(); j++){
-        std::cout << " , " << this->adjacencyList[it->first][j].getID();
-      }
-      std::cout << std::endl;
+      	std::cout << it->first.getID() << " : ";
+		if(this->adjacencyList[it->first].size() == 1)
+			std::cout << this->adjacencyList[it->first][0].getID();
+		else if(this->adjacencyList[it->first].size() > 1){
+			std::cout << this->adjacencyList[it->first][0].getID();
+			for(int j = 1; j < this->adjacencyList[it->first].size(); j++){
+				std::cout << " , " << this->adjacencyList[it->first][j].getID();
+			}
+		}
+		std::cout << std::endl;
     }
 }
 
