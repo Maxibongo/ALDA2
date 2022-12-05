@@ -51,13 +51,8 @@ void Node::print(){
 
 
 
-
 Edge::Edge(){
 	this->weight = 0;
-}
-
-Edge::Edge(int weight_){
-	this->weight = weight_;
 }
 
 Edge::Edge(Node start_, Node end_, int weight_){

@@ -21,11 +21,20 @@ struct Node{
     int ID;
 };
 
+
+struct NodeComparator{
+    public:
+    bool operator() (const Node& lNode, const Node& rNode) const
+   {
+       return lNode.getID() < rNode.getID();
+   }
+};
+
+
 struct Edge{
     public:
     Edge();
-    Edge(int weight_);
-    Edge(Node start_, Node end_, int weight_);
+    Edge(Node start_, Node end_, int weight_ = 0);
     Node getStart() const;
     Node getEnd() const;
     int getWeight() const;
@@ -40,13 +49,7 @@ struct Edge{
     int weight;
 };
 
-struct NodeComparator{
-    public:
-    bool operator() (const Node& lNode, const Node& rNode) const
-   {
-       return lNode.getID() < rNode.getID();
-   }
-};
+
 
 
 
