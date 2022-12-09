@@ -43,8 +43,15 @@ void Node::print(){
 	std::cout << "-------------------------------" << std::endl;
 }
 
-bool Node::operator==(const Node& other){
+bool Node::operator==(const Node& other) const {
 	if(this->getID() == other.getID()){
+		return true;
+	}
+	return false;
+}
+
+bool Node::operator<(const Node& other) const {
+	if(this->getID() < other.getID()){
 		return true;
 	}
 	return false;
@@ -244,7 +251,7 @@ std::vector<Node> Graph::getNodes() const{
 	return this->nodes;
 }
 
-std::map<Node, std::vector<Edge>, NodeComparator> Graph::getAdjacencyList() const{
+std::map<Node, std::vector<Edge>> Graph::getAdjacencyList() const{
 	return this->adjacencyList;
 }
 

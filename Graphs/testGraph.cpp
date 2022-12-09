@@ -22,9 +22,8 @@ int main() {
 	n1.print();
 	n2.print();
 
-	NodeComparator nComp;
 
-	std::cout << (nComp(n1,n2)) << std::endl;
+	std::cout << ((n1<n2)) << std::endl;
 
 	std::cout << "============================================" << std::endl;
 

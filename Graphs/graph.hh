@@ -15,21 +15,14 @@ struct Node{
     int getID() const;
     void setWeight(int weight_);
     void print();
-    bool operator==(const Node& other);
+    bool operator==(const Node& other) const ;
+    bool operator<(const Node& other) const;
 
     private:
     int weight;
     int ID;
 };
 
-
-struct NodeComparator{
-    public:
-    bool operator() (const Node& lNode, const Node& rNode) const
-   {
-       return lNode.getID() < rNode.getID();
-   }
-};
 
 
 struct Edge{
@@ -69,14 +62,14 @@ public:
     void print();
     std::vector<Edge> getEdges() const;
     std::vector<Node> getNodes() const;
-    std::map<Node, std::vector<Edge>, NodeComparator> getAdjacencyList() const;
+    std::map<Node, std::vector<Edge>> getAdjacencyList() const;
     bool getDirectional() const;
     bool operator==(const Graph& other);
 private:
     void setAdjacency();
     std::vector<Node> nodes;
     std::vector<Edge> edges;
-    std::map<Node, std::vector<Edge>, NodeComparator> adjacencyList;
+    std::map<Node, std::vector<Edge>> adjacencyList;
     bool directional;
 };
 
