@@ -50,11 +50,11 @@ struct Edge{
 
 class Graph{
 public:
-    Graph(bool dir = false);
-    Graph(Node n, bool dir = false);
-    Graph(Edge e, bool dir = false);
-    Graph(Node n, Edge e, bool dir = false);
-    Graph(std::vector<Node>& nodes_, std::vector<Edge>& edges_, bool dir = false);
+    Graph(bool dir = true);
+    Graph(Node n, bool dir = true);
+    Graph(Edge e, bool dir = true);
+    Graph(Node n, Edge e, bool dir = true);
+    Graph(std::vector<Node>& nodes_, std::vector<Edge>& edges_, bool dir = true);
     void addEdge(Edge e, bool bi=false);
     void addNode(Node n);
     void removeNode(Node n);
