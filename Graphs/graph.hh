@@ -15,6 +15,7 @@ struct Node{
     int getID() const;
     void setWeight(int weight_);
     void print();
+    bool operator==(const Node& other);
 
     private:
     int weight;
@@ -42,6 +43,7 @@ struct Edge{
     void setEnd(Node end_);
     void setWeight(int weight_);
     void print();
+    bool operator==(const Edge& other);
 
     private:
     Node start;
@@ -62,20 +64,22 @@ public:
     Graph(std::vector<Node>& nodes_, std::vector<Edge>& edges_, bool dir = false);
     void addEdge(Edge e, bool bi=false);
     void addNode(Node n);
+    void removeNode(Node n);
+    void removeEdge(Edge e);
     void print();
     std::vector<Edge> getEdges() const;
     std::vector<Node> getNodes() const;
-    std::map<Node, std::vector<Node>, NodeComparator> getAdjacencyList() const;
-    bool getDirectional();
+    std::map<Node, std::vector<Edge>, NodeComparator> getAdjacencyList() const;
+    bool getDirectional() const;
+    bool operator==(const Graph& other);
 private:
+    void setAdjacency();
     std::vector<Node> nodes;
     std::vector<Edge> edges;
-    std::map<Node, std::vector<Node>, NodeComparator> adjacencyList;
+    std::map<Node, std::vector<Edge>, NodeComparator> adjacencyList;
     bool directional;
 };
 
-template<class T>
-bool inVector(std::vector<T>& con, T element);
 
 
 

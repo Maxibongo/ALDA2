@@ -1,10 +1,10 @@
 #include "graph.hh"
 
 
-template<class T=Node>
+template<class T>
 bool inVector(std::vector<T>& con, T element){
 	for(int i = 0; i < con.size(); i++){
-		if(con[i].getID() == element.getID()){
+		if(con[i] == element){
 			return true;
 		}
 	}
@@ -41,6 +41,13 @@ void Node::print(){
 	if(this->weight != 0)
 		std::cout << "Node weight:" <<this->weight << std::endl;
 	std::cout << "-------------------------------" << std::endl;
+}
+
+bool Node::operator==(const Node& other){
+	if(this->getID() == other.getID()){
+		return true;
+	}
+	return false;
 }
 
 
@@ -97,6 +104,13 @@ void Edge::print(){
 	std::cout << "-------------------------------" << std::endl;
 }
 
+bool Edge::operator==(const Edge& other){
+	if(this->start == other.getStart() && this->end == other.getEnd() && this->weight == other.getWeight()){
+		return true;
+	}
+	return false;
+}
+
 
 
 
@@ -121,15 +135,8 @@ Graph::Graph(Edge e,bool dir){
 	this->edges.push_back(e);
 	if(!dir){
 		this->edges.push_back(Edge(e.getEnd(),e.getStart(),e.getWeight()));
-		return;
 	}
-
-	for(int i = 0; i < this->nodes.size(); i++){
-		this->adjacencyList[this->nodes[i]] = {};
-	}
-	for(int j = 0; j < edges.size(); j++){
-		this->adjacencyList[this->edges[j].getStart()].push_back(this->edges[j].getEnd());
-	}
+	setAdjacency();
 }
 
 Graph::Graph(Node n, Edge e, bool dir){
@@ -144,30 +151,27 @@ Graph::Graph(Node n, Edge e, bool dir){
 	if(!dir){
 		this->edges.push_back(Edge(e.getEnd(), e.getStart(), e.getWeight()));
 	}
-
-	for(int i = 0; i < this->nodes.size(); i++){
-		this->adjacencyList[this->nodes[i]] = {};
-	}
-	for(int j = 0; j < edges.size(); j++){
-		this->adjacencyList[this->edges[j].getStart()].push_back(this->edges[j].getEnd());
-	}
+	setAdjacency();
 }
 
 Graph::Graph(std::vector<Node>& nodes_, std::vector<Edge>& edges_,bool dir){
 	this->nodes = nodes_;
 	this->edges = edges_;
-	if(!dir){
-		for(int i = 0; i < edges_.size(); i++){
-			this->edges.push_back(Edge(edges_[i].getEnd(), edges_[i].getStart(), edges_[i].getWeight()));
+	for(int i = 0; i < this->edges.size(); i++){
+		if(!inVector(this->nodes, this->edges[i].getStart())){
+			this->nodes.push_back(this->edges[i].getStart());
+		}
+		if(!inVector(this->nodes, this->edges[i].getEnd())){
+			this->nodes.push_back(this->edges[i].getEnd());
+		}
+		if(!dir){
+			Edge reverse(this->edges[i].getEnd(),this->edges[i].getStart(), this->edges[i].getWeight());
+			if(!inVector(this->edges, reverse)){
+				this->edges.push_back(reverse);
+			}
 		}
 	}
-
-	for(int i = 0; i < this->nodes.size(); i++){
-		this->adjacencyList[this->nodes[i]] = {};
-	}
-	for(int j = 0; j < edges.size(); j++){
-		this->adjacencyList[this->edges[j].getStart()].push_back(this->edges[j].getEnd());
-	}
+	setAdjacency();
 }
 
 void Graph::addEdge(Edge e,bool bi){
@@ -178,11 +182,10 @@ void Graph::addEdge(Edge e,bool bi){
 	if(!inVector<Node>(this->nodes, e.getEnd())){
 		this->nodes.push_back(e.getEnd());
 	}
-	this->adjacencyList[e.getStart()].push_back(e.getEnd());
 	if(bi){
 		this->edges.push_back(Edge(e.getEnd(),e.getStart(),e.getWeight()));
-		this->adjacencyList[e.getEnd()].push_back(e.getStart());
 	}
+	setAdjacency();
 	
 }
 void Graph::addNode(Node n){
@@ -190,19 +193,48 @@ void Graph::addNode(Node n){
 	this->adjacencyList[n] = {};
 }
 
+void Graph::removeNode(Node n){
+	std::vector<Node> newNodes;
+	std::vector<Edge> newEdges;
+	for(int i = 0; i < this->nodes.size(); i++){
+		if(!(this->nodes[i] == n))
+			newNodes.push_back(this->nodes[i]);
+	}
+	for(int i = 0; i < this->edges.size(); i++){
+		if(!(this->edges[i].getStart() == n) && !(this->edges[i].getEnd() == n))
+			newEdges.push_back(this->edges[i]);
+	}
+	this->nodes = newNodes;
+	this->edges = newEdges;
+	setAdjacency();
+
+}
+
+void Graph::removeEdge(Edge e){
+	std::vector<Edge> newEdges;
+	for(int i = 0; i < this->edges.size(); i++){
+		if(!(this->edges[i] == e))
+			newEdges.push_back(this->edges[i]);
+	}
+	this->edges = newEdges;
+	setAdjacency();
+}
+
 void Graph::print(){
-	for(std::map<Node,std::vector<Node> >::iterator it = this->adjacencyList.begin(); it != this->adjacencyList.end(); ++it) {
+	std::cout << "-------------------------------" << std::endl;
+	for(std::map<Node,std::vector<Edge> >::iterator it = this->adjacencyList.begin(); it != this->adjacencyList.end(); ++it) {
       	std::cout << it->first.getID() << " : ";
 		if(this->adjacencyList[it->first].size() == 1)
-			std::cout << this->adjacencyList[it->first][0].getID();
+			std::cout << this->adjacencyList[it->first][0].getEnd().getID() << "(" << this->adjacencyList[it->first][0].getWeight() << ")";
 		else if(this->adjacencyList[it->first].size() > 1){
-			std::cout << this->adjacencyList[it->first][0].getID();
+			std::cout << this->adjacencyList[it->first][0].getEnd().getID() << "(" << this->adjacencyList[it->first][0].getWeight() << ")";
 			for(int j = 1; j < this->adjacencyList[it->first].size(); j++){
-				std::cout << " , " << this->adjacencyList[it->first][j].getID();
+				std::cout << " , " << this->adjacencyList[it->first][j].getEnd().getID() << "(" << this->adjacencyList[it->first][j].getWeight() << ")";
 			}
 		}
 		std::cout << std::endl;
     }
+	std::cout << "-------------------------------" << std::endl;
 }
 
 std::vector<Edge> Graph::getEdges() const{
@@ -212,11 +244,35 @@ std::vector<Node> Graph::getNodes() const{
 	return this->nodes;
 }
 
-std::map<Node, std::vector<Node>, NodeComparator> Graph::getAdjacencyList() const{
+std::map<Node, std::vector<Edge>, NodeComparator> Graph::getAdjacencyList() const{
 	return this->adjacencyList;
 }
 
-bool Graph::getDirectional(){
+bool Graph::getDirectional() const{
 	return this->directional;
 }
 
+bool Graph::operator==(const Graph& other){
+	if(this->nodes.size() != other.getNodes().size() || this->edges.size() != other.getEdges().size() || this->directional != other.getDirectional()){
+		return false;
+	}
+	for(int i = 0; i < this->nodes.size(); i++){
+		if(!(this->nodes[i] == other.getNodes()[i]))
+			return false;
+	}
+	for(int i = 0; i< this->edges.size(); i++){
+		if(!(this->edges[i] == other.getEdges()[i]))
+			return false;
+	}
+	return true;
+}
+
+void Graph::setAdjacency(){
+	this->adjacencyList.clear();
+	for(int i = 0; i < this->nodes.size(); i++){
+		this->adjacencyList[nodes[i]] = {};
+	}
+	for(int i = 0; i < this->edges.size(); i++){
+		this->adjacencyList[this->edges[i].getStart()].push_back(this->edges[i]);
+	}
+}
