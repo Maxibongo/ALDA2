@@ -1,5 +1,5 @@
 #include<deque>
-#include"graph.hh"
+#include"Graph.hh"
 
 bool inContainer(std::deque<Node>& Nodes, Node n){
     for(auto it = Nodes.cbegin(); it != Nodes.cend(); ++it){
