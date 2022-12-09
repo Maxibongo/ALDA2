@@ -19,9 +19,23 @@ int main(){
     std::map<Node, Node> parent;
 
     shortestPathDijkstra(HdN, HdN.getNodes()[5],distance, parent);
-    for(Node n : HdN.getNodes()){
-        std::cout << n.getID() << " parent: " << parent[n].getID() << " distance: " << distance[n] << std::endl;
-    }
+    
+    std::cout << std::endl;
+
+    std::vector<Node> cNodes;
+    cNodes.push_back(Node(0));
+    cNodes.push_back(Node(0));
+    cNodes.push_back(Node(0));
+
+    std::vector<Edge> cEdges;
+    cEdges.push_back(Edge(cNodes[0], cNodes[1], 12));
+    cEdges.push_back(Edge(cNodes[0], cNodes[2], 11));
+    cEdges.push_back(Edge(cNodes[1], cNodes[2], -3));
+    // cEdges.push_back(Edge(cNodes[2], cNodes[0], -100)); with this edge dijkstras algorithm does not finish because we create with this edge a negative cycle
+
+    Graph c(cNodes, cEdges, true);
+
+    shortestPathDijkstra(c, c.getNodes()[0], distance, parent);
 
     return 0;
 }

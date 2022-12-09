@@ -10,7 +10,10 @@ bool inContainer(std::deque<Node>& Nodes, Node n){
     return false;
 }
 
+
 void shortestPathDijkstra(Graph g, Node& start, std::map<Node,int>& distance, std::map<Node, Node>& parent){
+    distance.clear();
+    parent.clear();
     for(Node n: g.getNodes()){
         distance[n] = INT_MAX;
     }
@@ -35,5 +38,9 @@ void shortestPathDijkstra(Graph g, Node& start, std::map<Node,int>& distance, st
                 }
             }
         }
+    }
+
+    for(Node n : g.getNodes()){
+        std::cout << n.getID() << " parent: " << parent[n].getID() << " distance: " << distance[n] << std::endl;
     }
 }
