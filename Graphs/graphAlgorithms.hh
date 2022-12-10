@@ -10,17 +10,35 @@ bool inContainer(std::deque<Node>& Nodes, Node n){
     return false;
 }
 
+template<class T>
+bool inVector(std::vector<T>& con, T element){
+	for(int i = 0; i < con.size(); i++){
+		if(con[i] == element){
+			return true;
+		}
+	}
+	return false;
+}
 
-void shortestPathDijkstra(Graph g, Node& start, std::map<Node,int>& distance, std::map<Node, Node>& parent){
+void printParentDistance(Graph& g, std::map<Node,int>& distance, std::map<Node, Node>& parent){
+    for(Node n : g.getNodes()){
+        std::cout << n.getID() << " parent: " << parent[n].getID() << " distance: " << distance[n] << std::endl;
+    }
+}
+
+
+void Dijkstra(Graph& g, Node& start, std::map<Node,int>& distance, std::map<Node, Node>& parent){
+    // init
     distance.clear();
     parent.clear();
     for(Node n: g.getNodes()){
         distance[n] = INT_MAX;
+        parent[n] = -1;
     }
     distance[start] = 0;
     parent[start] = start;
     std::deque<Node> Q; 
-    Q.push_front(start); // Q.insert(s)
+    Q.push_front(start); // initialize deque with Q
     
     while(!Q.empty()){
         Node u = Q.front(); // get top element of stack
@@ -40,7 +58,34 @@ void shortestPathDijkstra(Graph g, Node& start, std::map<Node,int>& distance, st
         }
     }
 
-    for(Node n : g.getNodes()){
-        std::cout << n.getID() << " parent: " << parent[n].getID() << " distance: " << distance[n] << std::endl;
+    // print each node with parent and distance from start
+    printParentDistance(g, distance, parent);
+}
+
+std::vector<Node> findPath(Graph g, Node& start, Node& end){
+    // call shortestPathDijkstra and try to retieve a path
+    std::map<Node,int> distance; 
+    std::map<Node, Node> parent;
+    std::vector<Node> path;
+
+    Dijkstra(g, start ,distance, parent);
+
+    if(distance[end] == INT_MAX)
+        return path;
+
+    path.push_back(end);
+
+
+    while(path.back() != start){
+        path.push_back(parent[path.back()]);
     }
+    
+    std::reverse(path.begin(), path.end());
+
+    return path;
+}
+
+
+void BreadthFirstSearch(){
+    ;
 }

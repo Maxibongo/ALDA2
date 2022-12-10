@@ -37,6 +37,13 @@ bool Node::operator==(const Node& other) const {
 	return false;
 }
 
+bool Node::operator!=(const Node& other) const{
+	if(*this == other){
+		return false;
+	}
+	return true;
+}
+
 bool Node::operator<(const Node& other) const {
 	if(this->getID() < other.getID()){
 		return true;

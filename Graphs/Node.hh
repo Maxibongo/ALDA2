@@ -2,6 +2,7 @@
 #define NODE
 
 #include<iostream>
+#include<string>
 
 static int NodeID;
 
@@ -14,6 +15,7 @@ struct Node{
     void setWeight(int weight_);
     void print();
     bool operator==(const Node& other) const ;
+    bool operator!=(const Node& other) const;
     bool operator<(const Node& other) const;
 
     private:
