@@ -70,8 +70,30 @@ std::vector<Node> findPath(Graph g, Node& start, Node& end){
 
     Dijkstra(g, start ,distance, parent);
 
-    if(distance[end] == INT_MAX)
+    std::cout << "Dikstra finished" << std::endl;
+
+    // bool startIn = (std::find(g.getNodes().begin(), g.getNodes().end(), start) != std::end(g.getNodes())) ? false : true;
+    // bool endIn = (std::find(g.getNodes().begin(), g.getNodes().end(), end) != std::end(g.getNodes())) ? false : true;
+    // bool parIn = (std::find(g.getNodes().begin(), g.getNodes().end(), parent[end]) != std::end(g.getNodes())) ? false : true;
+
+
+    bool startIn = (std::find(g.getNodes().begin(), g.getNodes().end(), start) != g.getNodes().end()) ? true : false;
+    bool endIn = (std::find(g.getNodes().begin(), g.getNodes().end(), end) != std::end(g.getNodes())) ? true : false;
+    bool parIn = (std::find(g.getNodes().begin(), g.getNodes().end(), parent[end]) != g.getNodes().end()) ? true : false;
+    std::cout << startIn << std::endl;
+    std::cout << endIn << std::endl;
+    std::cout << parIn << std::endl;
+
+
+
+    // std::cout << std::endl;
+
+    // check if start node is part of the graph, end node is part of the graph, and the parent of the end node is part of the graph
+
+
+    if(distance[end] == INT_MAX){
         return path;
+    }
 
     path.push_back(end);
 

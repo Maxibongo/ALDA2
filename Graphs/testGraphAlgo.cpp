@@ -35,12 +35,12 @@ int main(){
     // Graph c(cNodes, cEdges, true);
 
     // Dijkstra(c, c.getNodes()[0], distance, parent);
-    std::vector<Node> path = findPath(HdN, Nodes[0], Nodes[6]);
+    Node irr(5);
+    std::vector<Node> path = findPath(HdN, Nodes[0], irr);
 
     for(int i = 0; i < path.size(); i++){
         std::cout << path[i].getID() << " ";
     }
     std::cout << std::endl;
-
     return 0;
 }
